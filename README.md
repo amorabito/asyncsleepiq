@@ -72,6 +72,24 @@ print(state.mode, state.remaining_minutes)
 
 Heating modes are not available on ClimateCool models.
 
+## Integration testing
+
+The repository includes a small script to exercise the ClimateCool APIs
+against a real account. Credentials are read from the `SLEEPIQ_USERNAME`
+and `SLEEPIQ_PASSWORD` environment variables or will be prompted for at
+runtime.
+
+```bash
+python scripts/climatecool_integration.py
+```
+
+Optionally set the core climate for the first bed by providing side,
+mode, and minutes:
+
+```bash
+python scripts/climatecool_integration.py --set left cooling_pull_med 240
+```
+
 ## Future Development
 
 Without documentation for the API, development requires obvserving how other interfaces interact with it.  Given the hardware dependencies are fairly high, any future development requires someone with the appropriate bed to be able to obvserve and test against.
