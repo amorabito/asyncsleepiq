@@ -10,7 +10,7 @@ setup(
     name="asyncsleepiq",
     packages=["asyncsleepiq", "asyncsleepiq.fuzion"],
     package_data={"asyncsleepiq": ["py.typed"]},
-    version="{{VERSION_PLACEHOLDER}}",
+    version="0.3.0",
     description="ASync SleepIQ API",
     long_description=readme(),
     long_description_content_type="text/markdown",

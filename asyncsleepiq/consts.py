@@ -117,4 +117,6 @@ BAMKEY = {
     "GetHeidiPresence": "THPG",
     "SetHeidiMode": "THMS",
     "GetHeidiMode": "THMG",
+    "SetClimateMode": "CLMS",
+    "GetClimateMode": "CLMG",
 }
