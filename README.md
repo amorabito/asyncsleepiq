@@ -1,6 +1,6 @@
 # AsyncSleepIQ
 
-AsyncSleepIQ is an library for accessing the SleepIQ API from Python. [SleepIQ](http://www.sleepnumber.com/sn/en/sleepiq-sleep-tracker) is an addon for [SleepNumber beds](http://www.sleepnumber.com/).
+AsyncSleepIQ is a library for accessing the SleepIQ API from Python. [SleepIQ](http://www.sleepnumber.com/sn/en/sleepiq-sleep-tracker) is an addon for [SleepNumber beds](http://www.sleepnumber.com/).
 
 ## Installation
 
@@ -53,6 +53,41 @@ async def main():
     await bed.stop_pump()
 
 asyncio.get_event_loop().run_until_complete(main())
+```
+
+## Climate Features
+
+### ClimateCool
+
+ClimateCool beds support cooling-only core climate control. Modes available are
+`off`, `cooling_pull_low`, `cooling_pull_med`, and `cooling_pull_high`. The
+duration may be set between 0 and 600 minutes.
+
+```python
+bed = (await client.get_beds())[0]
+await bed.set_core_climate(side="left", mode="cooling_pull_med", minutes=240)
+state = await bed.get_core_climate("left")
+print(state.mode, state.remaining_minutes)
+```
+
+Heating modes are not available on ClimateCool models.
+
+## Integration testing
+
+The repository includes a small script to exercise the ClimateCool APIs
+against a real account. Credentials are read from the `SLEEPIQ_USERNAME`
+and `SLEEPIQ_PASSWORD` environment variables or will be prompted for at
+runtime.
+
+```bash
+python scripts/climatecool_integration.py
+```
+
+Optionally set the core climate for the first bed by providing side,
+mode, and minutes:
+
+```bash
+python scripts/climatecool_integration.py --set left cooling_pull_med 240
 ```
 
 ## Future Development

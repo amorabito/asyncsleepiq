@@ -10,13 +10,14 @@ from .consts import (
     FOUNDATION_TYPES,
     End,
     Mode,
+    CoreTemps,
     Side,
     Speed,
 )
 from .light import SleepIQLight
 from .foot_warmer import SleepIQFootWarmer
 from .preset import SleepIQPreset
-from .core_climate import SleepIQCoreClimate
+from .core_climate import SleepIQCoreClimate, SleepIQClimateCoolCoreClimate
 
 
 class SleepIQFoundation:
@@ -29,6 +30,7 @@ class SleepIQFoundation:
         self.lights: list[SleepIQLight] = []
         self.foot_warmers: list[SleepIQFootWarmer] = []
         self.core_climates: list[SleepIQCoreClimate] = []
+        self.core_climate_cooling_only = False
         self.features: dict[str, bool] = {
             "boardIsASingle": False,
             "hasMassageAndLight": False,
@@ -54,6 +56,7 @@ class SleepIQFoundation:
         """Initialize all foundation features."""
         await self.init_lights()
         await self.init_foot_warmers()
+        await self.init_core_climates()
 
         if not self.type:
             return
@@ -66,6 +69,7 @@ class SleepIQFoundation:
         """Update all foundation data from API."""
         await self.update_lights()
         await self.update_foot_warmers()
+        await self.update_core_climates()
 
         if not self.type:
             return
@@ -89,6 +93,23 @@ class SleepIQFoundation:
         data = await self._api.get(f"bed/{self.bed_id}/foundation/footwarming")
         for foot_warmer in self.foot_warmers:
             await foot_warmer.update(data)
+
+    async def init_core_climates(self) -> None:
+        """Initialize list of core climates available on foundation."""
+        if not self.core_climate_cooling_only:
+            return
+        for side in [Side.LEFT, Side.RIGHT]:
+            self.core_climates.append(
+                SleepIQClimateCoolCoreClimate(self._api, self.bed_id, side, 0, CoreTemps.OFF)
+            )
+        await self.update_core_climates()
+
+    async def update_core_climates(self) -> None:
+        """Update core climate states from API."""
+        if not self.core_climates:
+            return
+        for core_climate in self.core_climates:
+            await core_climate.update({})
 
     async def init_lights(self) -> None:
         """Initialize list of lights available on foundation."""

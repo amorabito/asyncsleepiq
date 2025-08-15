@@ -3,7 +3,7 @@ from .asyncsleepiq import AsyncSleepIQ
 from .actuator import SleepIQActuator
 from .bed import SleepIQBed
 from .consts import *
-from .core_climate import SleepIQCoreClimate
+from .core_climate import CoreClimateState, SleepIQCoreClimate
 from .exceptions import (
     SleepIQAPIException,
     SleepIQLoginException,
@@ -15,4 +15,4 @@ from .light import SleepIQLight
 from .preset import SleepIQPreset
 from .sleeper import SleepIQSleeper
 
-__version__ = "{{VERSION_PLACEHOLDER}}"
+__version__ = "0.3.0"
